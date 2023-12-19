@@ -1,0 +1,118 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+
+<script>
+async function fetchPlayerStats() {
+  const playerName = document.getElementById('playerName').value;
+
+  try {
+    const searchResponse = await fetch(`https://www.balldontlie.io/api/v1/players?search=${playerName}`);
+    const searchData = await searchResponse.json();
+
+    if (searchData.data && searchData.data.length > 0) {
+      const playerId = searchData.data[0].id;
+      const statsResponse = await fetch(`https://www.balldontlie.io/api/v1/season_averages?player_ids[]=${playerId}`);
+      const statsData = await statsResponse.json();
+
+      if (statsData.data && statsData.data.length > 0) {
+        displayPlayerStats(playerName, statsData.data[0]);
+      } else {
+        console.error('No statistics found for the player.');
+      }
+    } else {
+      console.error('Player not found.');
+    }
+  } catch (error) {
+    console.error('Error fetching player stats:', error);
+  }
+}
+</script>
+<style>
+body {
+  background-color: white;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: orange;
+  color: white;
+  text-align: center;
+}
+
+form {
+  padding: 20px;
+
+}
+
+.header1 {
+  background-color:lightblue; 
+  color:black; 
+  padding: 10px; 
+  text-align: center;
+}
+
+            
+.header2 {
+  background-color: red; 
+  color: white;
+  padding: 10px; 
+  text-align: center;
+
+}
+
+#main-nav {
+  background-color: lightblue; 
+                
+}
+
+#main-nav ul li {
+  list-style-type: none;
+  display: inline-block;
+  text-align: center;
+  width: 30%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+}
+
+#main-nav li:hover {
+  background-color: #7c7c7c;
+  color:white;
+
+}
+.main-container{
+  background-color: red;
+  width: 100%;
+  height: 100%;
+}
+          
+</style>
+</head>
+  <body>
+      <header>
+          <h1 class="header1">Who is the best!! </h1> 
+      </header>
+      <nav id="main-nav">
+          <ul class="main-nav">
+              <li class="nav-item"><a href="Main_page.html">Home</a></li>
+              <li class="nav-item"><a href="about.html">About</a></li>
+              <li class="nav-item"><a href="help.html">Help</a></li>  
+          </ul>
+      </nav>
+
+  <div class = "bar">
+    <h1>Basketball Stats</h1>
+    <input type="text" id="playerName" placeholder="Enter player name">
+    <button onclick="fetchPlayerStats()">Search</button>
+
+    <div id="playerStats" class="hidden">
+      <h2 id="playerNameDisplay"></h2>
+      <p id="pointsPerGame"></p>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
